@@ -1,6 +1,4 @@
-
-
-export const Colors = {
+export  const Colors = {
   light: {
     text: 'black',
     background: 'white',
