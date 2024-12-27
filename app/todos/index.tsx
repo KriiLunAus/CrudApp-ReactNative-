@@ -7,13 +7,14 @@ import { ThemeContext } from "@/context/themeContext";
 import {data}  from "../../data/data"
 import Feather from '@expo/vector-icons/Feather';
 import { StatusBar } from "expo-status-bar";
-
+import {todosStyles} from "../../styles/todos"
 
 type Task = {
   id: string;
   taskName: string;
   completed: boolean;
 };
+
 
 export default function index() {
   const [taskTitle, setTaskTitle] = useState('');
@@ -25,7 +26,7 @@ export default function index() {
       try {
         const jsonData = await AsyncStorage.getItem("Todos");
         const todos = jsonData !== null ? JSON.parse(jsonData) : data;
-        
+
         if (todos && todos.length) {
           setTaskList(todos.sort((a, b) => b.id - a.id))
         } else {
@@ -51,7 +52,7 @@ export default function index() {
     setStorage()
   },[taskList])
 
-  const styles = createStyles(theme, colorScheme);
+  const styles = todosStyles(theme, colorScheme);
 
   const onSubmit = () => {
     let id = Math.random().toString(16).slice(2);
@@ -122,95 +123,3 @@ export default function index() {
       </SafeAreaView>
   )
 } 
-
-function createStyles(theme, colorScheme) {
-    return (
-    StyleSheet.create({
-container: {
-    flex: 1,
-    backgroundColor: theme.background,
-    paddingTop: 10,
-},
-tasksContainer: {
-    padding: 10,
-    gap: 10,
-    width: '100%',
-    maxWidth: 1024,
-    marginHorizontal: 'auto'
-},
-task: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-},
-taskTitle: {
-    color: theme.text,
-    width: '72%',
-    textAlignVertical: 'center',
-    fontSize: 18,
-    pointerEvents: 'auto'
-
-},
-form: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 0,
-    padding: 3,
-    width: '100%',
-    maxWidth: 1024,
-    marginHorizontal: 'auto'
-},
-input: {
-    width: 250,
-    maxWidth: '70%',
-    height: 50,
-    padding: 5,
-
-    overflow: 'hidden',
-    borderWidth: 2,
-    borderRadius: 10,
-    fontSize: 20,
-    borderColor: theme.border,
-    color: theme.text,
-    marginHorizontal: 'auto',
-    pointerEvents: 'auto'
-},
-addBtn: {
-    width: 80,
-    maxWidth: 120,
-    height: 50,
-    padding: 5,
-    borderRadius: 10,
-    overflow: 'hidden',
-    textAlign: 'center',
-    textAlignVertical: 'center',
-
-    borderWidth: 2,
-    borderColor: theme.border,
-    color: theme.text,
-    backgroundColor: theme.background,
-    pointerEvents: 'auto'
-},
-removeBtn: {
-    width: 100,
-    height: 40,
-    padding: 5,
-    borderRadius: 10,
-    overflow: 'hidden',
-    textAlign: 'center',
-    textAlignVertical: 'center',
-
-    fontSize: 18,
-    color: theme.text,
-
-    borderWidth: 2,
-    borderColor: theme.border,
-    backgroundColor: theme.background,
-    pointerEvents: 'auto'
-},
-completed: {
-    textDecorationLine: 'line-through',
-    color: 'gray'
-        }
-}))
-}
