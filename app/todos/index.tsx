@@ -1,16 +1,55 @@
 import { Link } from "expo-router";
 import { Text, View, TextInput, Pressable, FlatList, Keyboard, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "@/context/themeContext";
 import {data}  from "../../data/data"
 import Feather from '@expo/vector-icons/Feather';
+import { StatusBar } from "expo-status-bar";
 
+
+type Task = {
+  id: string;
+  taskName: string;
+  completed: boolean;
+};
 
 export default function index() {
   const [taskTitle, setTaskTitle] = useState('');
-  const [taskList, setTaskList] = useState(data.sort((a,b) => b.id - a.id));
+  const [taskList, setTaskList] = useState<Task[]>([]);
   const { theme, colorScheme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const jsonData = await AsyncStorage.getItem("Todos");
+        const todos = jsonData !== null ? JSON.parse(jsonData) : data;
+        
+        if (todos && todos.length) {
+          setTaskList(todos.sort((a, b) => b.id - a.id))
+        } else {
+          setTaskList(data.sort((a, b) => b.id - a.id))
+        }
+
+      } catch (err) {
+        throw new Error(`${err}`);
+      }
+    }
+    fetchData()
+  }, [])
+  
+  useEffect(() => {
+    const setStorage = async () => {
+      try {
+
+        await AsyncStorage.setItem("Todos", JSON.stringify(taskList));
+      } catch (err) {
+        throw new Error(`${err}`);
+      }
+    }
+    setStorage()
+  },[taskList])
 
   const styles = createStyles(theme, colorScheme);
 
@@ -78,7 +117,8 @@ export default function index() {
           contentContainerStyle = {styles.tasksContainer}
           keyExtractor={item => item.id}
           keyboardDismissMode= "on-drag"
-          />
+      />
+       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       </SafeAreaView>
   )
 } 
@@ -121,7 +161,8 @@ form: {
     marginHorizontal: 'auto'
 },
 input: {
-    width: '80%',
+    width: 250,
+    maxWidth: '70%',
     height: 50,
     padding: 5,
 
@@ -131,12 +172,12 @@ input: {
     fontSize: 20,
     borderColor: theme.border,
     color: theme.text,
-    marginLeft: 10,
-    marginRight: 15,
+    marginHorizontal: 'auto',
     pointerEvents: 'auto'
 },
 addBtn: {
-    width: 120,
+    width: 80,
+    maxWidth: 120,
     height: 50,
     padding: 5,
     borderRadius: 10,

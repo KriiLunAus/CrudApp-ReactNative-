@@ -3,12 +3,14 @@ export  const Colors = {
     text: 'black',
     background: 'white',
     icon: '#687076',
-    border: 'black'
+    border: 'black',
+    sun: 'orangered'
   },
   dark: {
     text: 'white',
     background: 'black',
     icon: '#9BA1A6',
-    border: 'white'
+    border: 'white',
+    moon: 'darkgrey'
   },
 };

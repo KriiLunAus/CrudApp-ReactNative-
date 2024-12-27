@@ -1,4 +1,5 @@
 import { View, Text, SafeAreaView, StyleSheet, Pressable } from 'react-native'
+import {StatusBar} from "expo-status-bar"
 import { Link } from 'expo-router'
 import { useContext } from 'react'
 import { ThemeContext } from '@/context/themeContext'
@@ -18,16 +19,16 @@ const index = () => {
           <Link style={styles.link} href={"/todos"}>Go to Todos</Link>
       </View>
       <Pressable style={styles.switchContainer} onPress={()=> setColorScheme(colorScheme === "dark" ? "light" : "dark")}>
-        <Text style={styles.switch}>Switch theme</Text>
+        {/* <Text style={styles.switch}>Switch theme</Text> */}
         <View>
           {colorScheme === "dark"
-            ? <Octicons name="moon" size={70} color={theme.text} />
-            : <FontAwesome name="sun-o" size={70} color={theme.text} />
+            ? <Octicons name="moon" size={70} color={theme.moon} />
+            : <FontAwesome name="sun-o" size={70} color={theme.sun} />
             }
         </View>
 
       </Pressable>
-     
+      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
     </SafeAreaView>
   )
 }
@@ -65,7 +66,7 @@ function createStyles(theme, colorScheme) {
       flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
-      maxHeight: 50,
+      maxHeight: 100,
     },
     switch: {
       padding: 10,
