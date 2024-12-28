@@ -7,7 +7,8 @@ import { ThemeContext } from "@/context/themeContext";
 import {data}  from "../../data/data"
 import Feather from '@expo/vector-icons/Feather';
 import { StatusBar } from "expo-status-bar";
-import {todosStyles} from "../../styles/todos"
+import { todosStyles } from "../../styles/todos"
+import Animated, {LinearTransition} from "react-native-reanimated";
 
 type Task = {
   id: string;
@@ -112,12 +113,13 @@ export default function index() {
           </Pressable>
       </View>
 
-        <FlatList
+        <Animated.FlatList
           data={taskList}
           renderItem={renderItem}
           contentContainerStyle = {styles.tasksContainer}
           keyExtractor={item => item.id}
-          keyboardDismissMode= "on-drag"
+          keyboardDismissMode="on-drag"
+          itemLayoutAnimation={LinearTransition}
       />
        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       </SafeAreaView>
